@@ -11,6 +11,9 @@ app.use(express.static("public")); // Serve frontend
 const API_KEY = process.env.GEMINI_API_KEY;
 
 app.post("/api/analyze", async (req, res) => {
+  console.log("Request body size:", JSON.stringify(req.body).length);
+  console.log("Request keys:", Object.keys(req.body));
+
   console.log("Request body received. Analyzing...");
 
   if (!req.body.base64Data || !req.body.mediaType || !req.body.prompt) {
@@ -39,6 +42,11 @@ app.post("/api/analyze", async (req, res) => {
 
     const data = await resp.json();
     if (data.error) {
+      if (data.error.code == 429) {
+        console.log("Gemini rate limit");
+        return res.status(400).json({ error: "Gemini rate limit" });
+      }
+      console.error("Error:", data.error);
       return res.status(400).json({ error: data.error.message });
     }
 

@@ -527,7 +527,7 @@ Notes:
     });
     
     const data = await resp.json();
-    if (data.error) throw new Error(data.error.message);
+    if (data.error) throw new Error(data.error);
     // --- Extract model text safely ---
     let raw = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
@@ -569,7 +569,11 @@ Notes:
     setStatus(`Found ${parsed.length} resident${parsed.length > 1 ? 's' : ''} — review below`, 'success');
   } catch (err) {
     console.error(err);
-    setStatus('Error: ' + err.message, 'error');
+    if (err.message.includes('Gemini rate limit')) {
+      setStatus('Error: Gemini rate limit 💀🥀', 'error');
+    } else {
+      setStatus('Error: ' + err.message, 'error');
+    }
   }
 }
 
