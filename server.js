@@ -9,6 +9,7 @@ app.use(express.json({ limit: "15mb" }));
 app.use(express.static("public")); // Serve frontend
 
 const API_KEY = process.env.GEMINI_API_KEY;
+const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
 app.post("/api/analyze", async (req, res) => {
   console.log("Request body size:", JSON.stringify(req.body).length);
@@ -24,7 +25,7 @@ app.post("/api/analyze", async (req, res) => {
     const { base64Data, mediaType, prompt } = req.body;
 
     const resp = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY,
+      "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + API_KEY,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
