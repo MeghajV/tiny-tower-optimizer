@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tiny Tower · Staff Optimizer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- App Header -->
+<div class="app-header">
+  <svg class="tower-art" viewBox="0 0 52 68" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+    <rect width="52" height="68" fill="#5ec8f0"/>
+    <rect x="10" y="10" width="32" height="58" fill="#b8c8d4"/>
+    <rect x="10" y="10" width="32" height="4" fill="#6888a0"/>
+    <rect x="10" y="24" width="32" height="4" fill="#6888a0"/>
+    <rect x="10" y="38" width="32" height="4" fill="#6888a0"/>
+    <rect x="10" y="52" width="32" height="4" fill="#6888a0"/>
+    <rect x="14" y="14" width="8" height="8" fill="#f0c000"/>
+    <rect x="30" y="14" width="8" height="8" fill="#d8e8f4"/>
+    <rect x="14" y="28" width="8" height="8" fill="#8820b0"/>
+    <rect x="30" y="28" width="8" height="8" fill="#1060c0"/>
+    <rect x="14" y="42" width="8" height="8" fill="#148828"/>
+    <rect x="30" y="42" width="8" height="8" fill="#e03030"/>
+    <rect x="20" y="56" width="12" height="12" fill="#3a5060"/>
+    <rect x="8" y="6" width="36" height="6" fill="#6888a0"/>
+    <rect x="12" y="2" width="28" height="6" fill="#6888a0"/>
+    <rect x="24" y="0" width="4" height="3" fill="#f0c000"/>
+    <rect x="10" y="10" width="32" height="58" fill="none" stroke="#3a5060" stroke-width="2"/>
+  </svg>
+  <div>
+    <div class="logo">TINY TOWER</div>
+    <div class="tagline">// Staff Optimizer</div>
+  </div>
+  <div class="header-badges">
+    <div class="badge" id="hdr-residents">0 RES</div>
+    <div class="badge" id="hdr-shops">0 SHOPS</div>
+  </div>
+</div>
+
+<!-- Pages -->
+<div class="pages">
+
+  <!-- PAGE 1: Data Entry -->
+  <div class="page active" id="page-entry">
+    <div class="panel">
+      <div class="panel-hdr">DATA ENTRY</div>
+      <div class="panel-body">
+        <div class="inner-tabs">
+          <button class="inner-tab active" onclick="switchInner('residents')">RESIDENTS</button>
+          <button class="inner-tab" onclick="switchInner('shops')">SHOPS</button>
+        </div>
+
+        <!-- Add Resident -->
+        <div id="inner-residents">
+          <div class="import-zone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+            <input type="file" accept="image/*" onchange="handleImageFile(this.files[0])">
+            <span class="import-icon">📷</span>
+            <span class="import-label">SCAN SCREENSHOT</span>
+            <span class="import-sub">Upload a screenshot of the bitizens page</span>
+          </div>
+          <div class="parse-status" id="parse-status">
+            <div class="spinner" id="parse-spinner"></div>
+            <span id="parse-msg">Scanning...</span>
+          </div>
+          <div id="preview-area">
+            <div class="preview-hdr">FOUND RESIDENTS — CONFIRM TO ADD</div>
+            <div id="preview-list"></div>
+            <div style="display:flex;gap:6px;margin-top:8px;">
+              <button class="btn btn-green" style="flex:2" onclick="confirmImport()">✓ ADD ALL</button>
+              <button class="btn btn-gray" style="flex:1" onclick="cancelImport()">✗ CANCEL</button>
+            </div>
+          </div>
+          <div class="divider-or">or add manually</div>
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="r-name" placeholder="e.g. Alex">
+          </div>
+          <div class="skill-grid">
+            <div class="skill-item" id="sk-Food">
+              <label><span class="skill-dot dot-Food"></span>Food</label>
+              <div class="skill-input-wrap">
+                <input type="range" min="0" max="9" value="5" oninput="this.nextElementSibling.textContent=this.value">
+                <span class="skill-val">5</span>
+              </div>
+            </div>
+            <div class="skill-item" id="sk-Service">
+              <label><span class="skill-dot dot-Service"></span>Service</label>
+              <div class="skill-input-wrap">
+                <input type="range" min="0" max="9" value="5" oninput="this.nextElementSibling.textContent=this.value">
+                <span class="skill-val">5</span>
+              </div>
+            </div>
+            <div class="skill-item" id="sk-Recreation">
+              <label><span class="skill-dot dot-Recreation"></span>Rec</label>
+              <div class="skill-input-wrap">
+                <input type="range" min="0" max="9" value="5" oninput="this.nextElementSibling.textContent=this.value">
+                <span class="skill-val">5</span>
+              </div>
+            </div>
+            <div class="skill-item" id="sk-Creative">
+              <label><span class="skill-dot dot-Creative"></span>Creative</label>
+              <div class="skill-input-wrap">
+                <input type="range" min="0" max="9" value="5" oninput="this.nextElementSibling.textContent=this.value">
+                <span class="skill-val">5</span>
+              </div>
+            </div>
+            <div class="skill-item" id="sk-Retail">
+              <label><span class="skill-dot dot-Retail"></span>Retail</label>
+              <div class="skill-input-wrap">
+                <input type="range" min="0" max="9" value="5" oninput="this.nextElementSibling.textContent=this.value">
+                <span class="skill-val">5</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Dream Job (optional — future shops OK)</label>
+            <input type="text" id="r-fav" placeholder="e.g. Sushi Bar" list="shops-datalist">
+            <datalist id="shops-datalist"></datalist>
+          </div>
+          <button class="btn btn-green" onclick="addResident()">+ ADD RESIDENT</button>
+        </div>
+
+        <!-- Add Shop -->
+        <div id="inner-shops" style="display:none;">
+          <div class="form-group">
+            <label>Shop Name</label>
+            <input type="text" id="s-name" placeholder="e.g. Sushi Bar">
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="s-cat">
+              <option value="Food">Food</option>
+              <option value="Service">Service</option>
+              <option value="Recreation">Recreation</option>
+              <option value="Creative">Creative</option>
+              <option value="Retail">Retail</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Staff Slots</label>
+            <select id="s-slots">
+              <option value="1">1 worker</option>
+              <option value="2">2 workers</option>
+              <option value="3" selected>3 workers</option>
+            </select>
+          </div>
+          <button class="btn btn-green" onclick="addShop()">+ ADD SHOP</button>
+          <div style="margin-top:14px;">
+            <div class="section-div">SHOPS (<span id="s-count">0</span>)</div>
+            <div id="shop-list"><div class="empty-slot">No shops yet</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Residents -->
+  <div class="page" id="page-residents">
+    <div id="residents-content">
+      <div class="empty-state">
+        <div style="font-size:40px;margin-bottom:10px;">👥</div>
+        <h3>NO RESIDENTS</h3>
+        <p>Add residents in Data Entry</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Assignments -->
+  <div class="page" id="page-assignments">
+    <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-yellow" style="flex:1;min-width:120px;" onclick="runOptimizer()">▶ OPTIMIZE</button>
+      <label style="display:flex;align-items:center;gap:6px;font-size:15px;color:white;text-shadow:1px 1px 0 var(--border-dark);cursor:pointer;flex-shrink:0;">
+        <input type="checkbox" id="lock-existing" checked style="cursor:pointer;accent-color:var(--accent);">
+        Preserve assignments
+      </label>
+    </div>
+    <div id="results-area">
+      <div class="empty-state">
+        <div style="font-size:40px;margin-bottom:10px;">🏢</div>
+        <h3>NO ASSIGNMENTS</h3>
+        <p>Add data, then press OPTIMIZE</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="switchPage('entry', this)">
+    <span class="nav-icon">✏️</span>
+    <span>DATA</span>
+  </button>
+  <button class="nav-btn" onclick="switchPage('residents', this)">
+    <span class="nav-icon">👥</span>
+    <span>RESIDENTS</span>
+    <span class="nav-badge" id="nav-res-count" style="display:none">0</span>
+  </button>
+  <button class="nav-btn" onclick="switchPage('assignments', this)">
+    <span class="nav-icon">🏢</span>
+    <span>ASSIGN</span>
+  </button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sql.js@1.10.2/dist/sql-wasm.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
