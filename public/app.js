@@ -498,8 +498,6 @@ async function parseResidentsFromImage(base64Data, mediaType) {
   document.getElementById('preview-area').style.display = 'none';
   pendingImport = [];
 
-  const apiKey = 'AIzaSyBP0RStblgGYMYs4sWLPqXpFi9dT_CI1g0';
-
   const prompt = `This is a screenshot from the mobile game Tiny Tower showing a list of residents.
 For each resident visible, extract:
 1. Their full name
